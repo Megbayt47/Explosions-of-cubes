@@ -40,6 +40,8 @@ public class Spawner : MonoBehaviour
             Color color = Random.ColorHSV();
 
             newCube.Initialize(chanceSpawn, scale, color);
+
+            cubes.Add(newCube);
         }
     }
 
