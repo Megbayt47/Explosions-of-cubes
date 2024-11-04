@@ -1,7 +1,26 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
+    [SerializeField] private List<Cube> cubes = new List<Cube>();
+
+    private void OnEnable()
+    {
+        foreach (Cube cube in cubes)
+        {
+            cube.Exploded += OnCubeExploded;
+        }
+    }
+
+    private void OnDisable()
+    {
+        foreach (Cube cube in cubes)
+        {
+            cube.Exploded -= OnCubeExploded;
+        }
+    }
+
     private void CreateCubes(Cube cube)
     {
         int divider = 2;
@@ -14,26 +33,18 @@ public class Spawner : MonoBehaviour
             Quaternion rotation = Random.rotation;
             Cube newCube = Instantiate(cube, cube.transform.position, rotation);
 
+            newCube.Exploded += OnCubeExploded;
+
             int chanceSpawn = cube.Chance / divider;
             Vector3 scale = cube.transform.localScale / divider;
             Color color = Random.ColorHSV();
 
-            newCube.Construct(chanceSpawn, scale, color);
+            newCube.Initialize(chanceSpawn, scale, color);
         }
     }
 
-    public bool TrySpawn(Cube cube)
+    public void OnCubeExploded(Cube cube)
     {
-        int minValue = 0;
-        int maxValue = 100;
-
-        if (Random.Range(minValue, maxValue + 1) <= cube.Chance)
-        {
-            CreateCubes(cube);
-
-            return true;
-        }
-
-        return false;
+        CreateCubes(cube);
     }
 }

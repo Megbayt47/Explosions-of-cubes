@@ -15,12 +15,7 @@ class Detector : MonoBehaviour
             {
                 if (hit.collider.TryGetComponent(out Cube cube))
                 {
-                    if (_spawner.TrySpawn(cube))
-                    {
-                        _exploder.Explode(cube);
-                    }
-
-                    Destroy(cube.gameObject);
+                    cube.TryExploded();
                 }
             }
         }
