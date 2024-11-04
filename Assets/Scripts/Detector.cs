@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-class Detector : MonoBehaviour
+public class Detector : MonoBehaviour
 {
     [SerializeField] private Spawner _spawner;
     [SerializeField] private Exploder _exploder;
