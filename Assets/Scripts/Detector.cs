@@ -2,20 +2,25 @@
 
 public class Detector : MonoBehaviour
 {
-    [SerializeField] private Spawner _spawner;
-    [SerializeField] private Exploder _exploder;
+    private Camera _camera;
+    private int _keyLeftMouseButton = 0;
+
+    private void Start()
+    {
+        _camera = Camera.main;
+    }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(_keyLeftMouseButton))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
                 if (hit.collider.TryGetComponent(out Cube cube))
                 {
-                    cube.TryExploded();
+                    cube.TryExplode();
                 }
             }
         }

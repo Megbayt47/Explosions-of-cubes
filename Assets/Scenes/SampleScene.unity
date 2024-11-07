@@ -797,7 +797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43f0b5cb725fee6479cdb78b220fed1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _explosionForce: 10000
+  _explosionForce: 13000
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -810,7 +810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c366f773d32e5954aa2be63ea4967fe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cubes:
+  _cubes:
   - {fileID: 629346006}
   - {fileID: 2009266150}
   - {fileID: 1783971163}
@@ -819,6 +819,7 @@ MonoBehaviour:
   - {fileID: 1054416346}
   - {fileID: 1395976463}
   - {fileID: 1066910620}
+  _exploder: {fileID: 963194229}
 --- !u!114 &963194231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -831,8 +832,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e982000a5267b746b0d004c19db0abd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawner: {fileID: 963194230}
-  _exploder: {fileID: 963194229}
 --- !u!114 &1054416346 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7696261605520452526, guid: e7911c17dec09c5449d66a3ffad17891, type: 3}

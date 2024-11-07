@@ -3,11 +3,12 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private List<Cube> cubes = new List<Cube>();
+    [SerializeField] private List<Cube> _cubes = new();
+    [SerializeField] private Exploder _exploder;
 
     private void OnEnable()
     {
-        foreach (Cube cube in cubes)
+        foreach (Cube cube in _cubes)
         {
             cube.Exploded += OnCubeExploded;
         }
@@ -15,7 +16,7 @@ public class Spawner : MonoBehaviour
 
     private void OnDisable()
     {
-        foreach (Cube cube in cubes)
+        foreach (Cube cube in _cubes)
         {
             cube.Exploded -= OnCubeExploded;
         }
@@ -27,6 +28,8 @@ public class Spawner : MonoBehaviour
         int minRandomNumber = 2;
         int maxRandomNumber = 6;
         int number = Random.Range(minRandomNumber, maxRandomNumber + 1);
+
+        List<Cube> cubes = new();
 
         for (int i = 0; i < number; i++)
         {
@@ -43,10 +46,13 @@ public class Spawner : MonoBehaviour
 
             cubes.Add(newCube);
         }
+
+        _exploder.BlowUp(cubes, cube);
     }
 
-    public void OnCubeExploded(Cube cube)
+    private void OnCubeExploded(Cube cube)
     {
         CreateCubes(cube);
+        cube.Exploded -= OnCubeExploded;
     }
 }

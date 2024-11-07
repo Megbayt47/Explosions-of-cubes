@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Renderer))]
-
+[RequireComponent (typeof(Rigidbody))]
 public class Cube : MonoBehaviour
 {
     private Renderer _renderer;
@@ -10,10 +10,12 @@ public class Cube : MonoBehaviour
     public event Action<Cube> Exploded;
 
     public int Chance { get; private set; } = 100;
+    public Rigidbody Rigidbody { get; private set; }
 
     private void Awake()
     {
         _renderer = GetComponent<Renderer>();
+        Rigidbody = GetComponent<Rigidbody>();
     }
 
     public void Initialize(int chanceSpawn, Vector3 scale, Color color)
@@ -23,7 +25,7 @@ public class Cube : MonoBehaviour
         _renderer.material.color = color;
     }
 
-    public void TryExploded()
+    public void TryExplode()
     {
         int minValue = 0;
         int maxValue = 100;
