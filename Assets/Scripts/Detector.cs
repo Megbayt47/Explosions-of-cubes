@@ -3,7 +3,7 @@
 public class Detector : MonoBehaviour
 {
     private Camera _camera;
-    private int _keyLeftMouseButton = 0;
+    private int _keyMouseButton = 0;
 
     private void Start()
     {
@@ -12,7 +12,7 @@ public class Detector : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(_keyLeftMouseButton))
+        if (Input.GetMouseButtonDown(_keyMouseButton))
         {
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 

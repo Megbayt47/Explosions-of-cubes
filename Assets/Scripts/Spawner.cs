@@ -6,11 +6,14 @@ public class Spawner : MonoBehaviour
     [SerializeField] private List<Cube> _cubes = new();
     [SerializeField] private Exploder _exploder;
 
+    private readonly int _multiply = 2;
+    private readonly int _divider = 2;
+
     private void OnEnable()
     {
         foreach (Cube cube in _cubes)
         {
-            cube.Exploded += OnCubeExploded;
+            cube.Exploded += OnCubeExplode;
         }
     }
 
@@ -18,13 +21,12 @@ public class Spawner : MonoBehaviour
     {
         foreach (Cube cube in _cubes)
         {
-            cube.Exploded -= OnCubeExploded;
+            cube.Exploded -= OnCubeExplode;
         }
     }
 
     private void CreateCubes(Cube cube)
     {
-        int divider = 2;
         int minRandomNumber = 2;
         int maxRandomNumber = 6;
         int number = Random.Range(minRandomNumber, maxRandomNumber + 1);
@@ -36,23 +38,32 @@ public class Spawner : MonoBehaviour
             Quaternion rotation = Random.rotation;
             Cube newCube = Instantiate(cube, cube.transform.position, rotation);
 
-            newCube.Exploded += OnCubeExploded;
+            newCube.Exploded += OnCubeExplode;
+            newCube.ExplodedCube += CubeExplodes;
 
-            int chanceSpawn = cube.Chance / divider;
-            Vector3 scale = cube.transform.localScale / divider;
+            int chanceSpawn = cube.Chance / _divider;
+            Vector3 scale = cube.transform.localScale / _divider;
             Color color = Random.ColorHSV();
+            float blastRadius = cube.BlastRadius * _multiply;
+            float explosionForce = cube.ExplosionForce * _multiply;
 
-            newCube.Initialize(chanceSpawn, scale, color);
+            newCube.Initialize(chanceSpawn, scale, color, blastRadius, explosionForce);
 
             cubes.Add(newCube);
         }
 
-        _exploder.BlowUp(cubes, cube);
+        _exploder.BlowUpCubes(cubes, cube);
     }
 
-    private void OnCubeExploded(Cube cube)
+    private void OnCubeExplode(Cube cube)
     {
         CreateCubes(cube);
-        cube.Exploded -= OnCubeExploded;
+        cube.Exploded -= OnCubeExplode;
+    }
+
+    private void CubeExplodes(Cube cube)
+    {
+        _exploder.ExplodedCube(cube);
+        cube.ExplodedCube -= CubeExplodes;
     }
 }
