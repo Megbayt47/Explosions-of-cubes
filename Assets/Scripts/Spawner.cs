@@ -13,7 +13,7 @@ public class Spawner : MonoBehaviour
     {
         foreach (Cube cube in _cubes)
         {
-            cube.Exploded += OnCubeExplode;
+            cube.Destruction += OnCubeDestructed;
         }
     }
 
@@ -21,7 +21,7 @@ public class Spawner : MonoBehaviour
     {
         foreach (Cube cube in _cubes)
         {
-            cube.Exploded -= OnCubeExplode;
+            cube.Destruction -= OnCubeDestructed;
         }
     }
 
@@ -31,15 +31,13 @@ public class Spawner : MonoBehaviour
         int maxRandomNumber = 6;
         int number = Random.Range(minRandomNumber, maxRandomNumber + 1);
 
-        List<Cube> cubes = new();
-
         for (int i = 0; i < number; i++)
         {
             Quaternion rotation = Random.rotation;
             Cube newCube = Instantiate(cube, cube.transform.position, rotation);
 
+            newCube.Destruction += OnCubeDestructed;
             newCube.Exploded += OnCubeExplode;
-            newCube.ExplodedCube += CubeExplodes;
 
             int chanceSpawn = cube.Chance / _divider;
             Vector3 scale = cube.transform.localScale / _divider;
@@ -48,22 +46,18 @@ public class Spawner : MonoBehaviour
             float explosionForce = cube.ExplosionForce * _multiply;
 
             newCube.Initialize(chanceSpawn, scale, color, blastRadius, explosionForce);
-
-            cubes.Add(newCube);
         }
+    }
 
-        _exploder.BlowUpCubes(cubes, cube);
+    private void OnCubeDestructed(Cube cube)
+    {
+        CreateCubes(cube);
+        cube.Destruction -= OnCubeDestructed;
     }
 
     private void OnCubeExplode(Cube cube)
     {
-        CreateCubes(cube);
-        cube.Exploded -= OnCubeExplode;
-    }
-
-    private void CubeExplodes(Cube cube)
-    {
         _exploder.ExplodedCube(cube);
-        cube.ExplodedCube -= CubeExplodes;
+        cube.Exploded -= OnCubeExplode;
     }
 }

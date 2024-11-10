@@ -7,8 +7,8 @@ public class Cube : MonoBehaviour
 {
     private Renderer _renderer;
 
+    public event Action<Cube> Destruction;
     public event Action<Cube> Exploded;
-    public event Action<Cube> ExplodedCube;
 
     public int Chance { get; private set; } = 100;
     public float BlastRadius { get; private set; } = 20;
@@ -37,12 +37,12 @@ public class Cube : MonoBehaviour
 
         if (UnityEngine.Random.Range(minValue, maxValue + 1) <= Chance)
         {
-            Exploded?.Invoke(this);
+            Destruction?.Invoke(this);
             Destroy(gameObject);
         }
         else
         {
-            ExplodedCube?.Invoke(this);
+            Exploded?.Invoke(this);
             Destroy(gameObject);
         }
     }
