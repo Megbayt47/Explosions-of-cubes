@@ -58,6 +58,7 @@ public class Spawner : MonoBehaviour
         _randomSoundWin.Play();
 
         CreateCubes(cube);
+
         cube.Destructed -= OnCubeDestructe;
         cube.Exploded -= OnCubeExplode;
     }
@@ -65,7 +66,10 @@ public class Spawner : MonoBehaviour
     private void OnCubeExplode(Cube cube)
     {
         _explosiveFartSound.Play();
+
         _exploder.ExplodedCube(cube);
+
+        cube.Destructed -= OnCubeDestructe;
         cube.Exploded -= OnCubeExplode;
     }
 
