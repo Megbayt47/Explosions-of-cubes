@@ -5,15 +5,18 @@ public class Spawner : MonoBehaviour
 {
     [SerializeField] private List<Cube> _cubes = new();
     [SerializeField] private Exploder _exploder;
+    [SerializeField] private AudioSource _explosiveFartSound;
+    [SerializeField] private AudioSource[] _winSounds;
 
     private readonly int _multiply = 2;
     private readonly int _divider = 2;
+    private AudioSource _randomSoundWin;
 
     private void OnEnable()
     {
         foreach (Cube cube in _cubes)
         {
-            cube.Destruction += OnCubeDestructed;
+            cube.Destructed += OnCubeDestructe;
         }
     }
 
@@ -21,7 +24,7 @@ public class Spawner : MonoBehaviour
     {
         foreach (Cube cube in _cubes)
         {
-            cube.Destruction -= OnCubeDestructed;
+            cube.Destructed -= OnCubeDestructe;
         }
     }
 
@@ -36,7 +39,7 @@ public class Spawner : MonoBehaviour
             Quaternion rotation = Random.rotation;
             Cube newCube = Instantiate(cube, cube.transform.position, rotation);
 
-            newCube.Destruction += OnCubeDestructed;
+            newCube.Destructed += OnCubeDestructe;
             newCube.Exploded += OnCubeExplode;
 
             int chanceSpawn = cube.Chance / _divider;
@@ -49,15 +52,25 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    private void OnCubeDestructed(Cube cube)
+    private void OnCubeDestructe(Cube cube)
     {
+        _randomSoundWin = RandomSound();
+        _randomSoundWin.Play();
+
         CreateCubes(cube);
-        cube.Destruction -= OnCubeDestructed;
+        cube.Destructed -= OnCubeDestructe;
+        cube.Exploded -= OnCubeExplode;
     }
 
     private void OnCubeExplode(Cube cube)
     {
+        _explosiveFartSound.Play();
         _exploder.ExplodedCube(cube);
         cube.Exploded -= OnCubeExplode;
+    }
+
+    private AudioSource RandomSound()
+    {
+        return _winSounds[Random.Range(0, _winSounds.Length)];
     }
 }
